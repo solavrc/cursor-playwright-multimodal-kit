@@ -1,0 +1,46 @@
+---
+description: 開発を始めましょう | 開発を終了しましょう
+globs:
+alwaysApply: false
+---
+# Development Environment Setup Guide
+
+This project WILL automatically prepare and bootstrap your development environment whenever you issue a command such as "Start development" (or any comparable phrase). Each step below is **mandatory**—skipping or altering a step is **not allowed** and may break the workflow.
+
+## Development Environment Startup Procedure
+
+1.  **Start the development server NOW.**
+    *   Before starting the server, **instruct the user to click `Move to background`.**
+    ```
+    run_terminal_cmd({ command: "BROWSER=none npm run start", explanation: "Start the React development server", is_background: false })
+    ```
+2.  **Confirm the server is fully operational.**
+    *   **You MUST** inspect the output located at `<manually_added_selection>` and relay it verbatim to the user. *Under no circumstances may this step be skipped.*
+    *   Proceed **only if** the output contains the exact phrase **"No issues found."** — otherwise halt immediately and notify the user of the problem.
+3.  **Launch the application in the browser.**
+    *   Extract the `PORT` value from the previous output.
+    *   **Navigate without delay**:
+        ```
+        mcp_playwright_browser_navigate({ url: "http://localhost:${PORT}" })
+        ```
+4.  **Validate the UI and capture evidence.**
+    *   Snapshot the current page state:
+        ```
+        mcp_playwright_browser_snapshot({ random_string: "initial_snapshot" })
+        ```
+    *   Take a screenshot:
+        ```
+        mcp_playwright_browser_take_screenshot({ raw: false })
+        ```
+    *   Provide concise, actionable feedback describing UI elements, layout, and visible functionality based on the captured screenshot. Include visual design observations and suggestions for improvement to inspire the user's development motivation, and propose relevant next steps.
+
+## Termination Procedure
+
+When the user issues a command such as "Finish development" (or any equivalent), you **MUST** terminate the environment **immediately**.
+
+1.  **Close the Playwright browser at once.**
+    ```
+    mcp_playwright_browser_close({ random_string: "close_browser" })
+    ```
+2.  **Stop the development server.**
+    *   Instruct the user to locate the terminal where the `npm run start` command is running (the one they were asked to move to the background) and press `Ctrl+C` to terminate the server process.
